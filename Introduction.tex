@@ -60,6 +60,101 @@ Hash \gls{mf} \textit{de novo} numerically encode non-predefined substructures. 
 
 \textbf{Number} of the 22? Ames models presented in the Second Ames International Challenge by \textcite{furuhama_evaluation_2023} utilise \gls{mf}-type input data.
 
+\subsection{An Abridged Introduction to Graphs}
+A graph $G=(V,E)$ models entities as a $V$ set of $v$ nodes, and a $E$ set of pairwise entity relationships $e$, known as edges, in non-Euclidean space \cite{scarselli_graph_2009}. The features of any node $i$ are contained in a real-valued $d$-dimensional vector $\vec{h}_i\in\mathbb{R}^d$.
 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{.3\textwidth}
+        \includegraphics[width=100pt]{Images/NDMA Structure.pdf}
+        \caption{Skeleton structure of \gls{ndma}.}
+        \label{fig:gs_a}
+    \end{subfigure}
+    % Graph 1
+    \begin{subfigure}[b]{.3\textwidth}
+        \begin{tikzpicture}
+        \graph [nodes = {circle,draw}, spring layout]
+            {
+              a [desired at={(0,3)}]
+              -- b[x=1,y=2]
+              -- {c[x=1,y=1, nudge down=2mm], d[x=2,y=3]
+                  -- e[x=3,y=2]}
+            };
+        \end{tikzpicture}
+        \caption{\gls{ndma} as a molecular bipartite graph.}
+        \label{fig:gs_b}
+    \end{subfigure}
+    % Graph 2
+    \begin{subfigure}[b]{.3\textwidth}
+        \begin{tikzpicture}
+          \graph [nodes = {circle,draw}, spring layout]
+             {
+               a [desired at={(0,3)}]
+               -- b[x=1,y=2]
+               -- {c[x=1,y=1, nudge down=2mm]], d[x=2,y=3]
+                   -- e[x=3,y=2]}
+             };
+          \foreach \i in {a,b,c,d,e} {
+            \foreach \j in {a,b,c,d,e} {
+              \path [draw, thin] (\i) -- (\j);
+            }
+          };
+        \end{tikzpicture}
+        \caption{\gls{ndma} as a Molecular complete graph.}
+        \label{fig:gs_c}
+    \end{subfigure}
+    \caption{Representations of \gls{ndma} as a skeleton diagram and a graph.}
+    \label{fig:Graph_Structures}
+\end{figure}
 
-Structural Key
+As shown in \cref{fig:Graph_Structures}, molecules are analagous to graphs when we consider atoms as nodes, bonds as edges, and the qualities of atoms and bonds as the vectors associated with each node and edge.
+
+A \gls{gnn} is a \gls{nn} operating on graph-structured data. It may learn to predict the qualities of nodes (e.g., hybridisation state), edges (e.g., bond length) or the whole graph (e.g., Ames positivity) \cite{jin_refined_2022}.
+
+ \Glspl{gnn} first AGGREGATE the information contained in the existing feature vectors $\vec{h}_j^{(l-1)}$ of each node's $n$-hop neighbours $\mathcal{N}(i)$ using a permutationally invariant aggregation function such as mean or sum \cref{eq:aggregate}. An UPDATE function then combines the aggregated information, $\vec{a}_i^{(l)}$, with the feature vector of the node $\vec{h}_i^{(l)}$ to form the new node representation $\vec{h}_i^{(l)}$ \cref{eq:update}.
+
+% To do this, \glspl{gnn} iteratively update the representations of each node by aggregating \textit{messages} received from their $n$-hop neighbours. This aggregation function is permutationally invariant, such as mean or sum. Let $\vec{h}_i^{(l)}$ be the feature vector of $i$ at layer $l$ and let $\mathcal{N}(i)$ denote the $n$-hop neighbours of $i$. The AGGREGATE-COMBINE steps are repeated for the network's $l$ layers.
+
+\textbf{Need a bit later how our UPDATE is actually the transformer...}  And maybe we should do a : to denote we are in the set of all nodes for the readout as we do in the aggregate
+
+\begin{DispWithArrows}
+    \vec{a}_i^{(l)} &= \text{AGGREGATE}^{(l)} \left( \{ \vec{h}_j^{(l-1)} : j \in \mathcal{N}(i) \} \right),
+        \Arrow[tikz=<-, jump=2]{Repeat for $L$ layers} \label{eq:aggregate} \\
+    \vec{h}_i^{(l)} &= \text{UPDATE}^{(l)} \left( \vec{h}_i^{(l-1)}, \vec{a}_i^{(l)} \right) \label{eq:update} \\
+    &\vdots \nonumber \\
+    \vec{h}_G &= \text{READOUT} \left( \{ \vec{h}_i^{(L)} \}_{i \in V} \right) \label{eq:readout}
+\end{DispWithArrows}
+
+After $L$ iterations or \textit{layers} a READOUT graph-pooling function then combines the representation of every node $\{ \vec{h}_i^{(L)} \}_{i \in V}$ into a unified whole-graph representation.
+
+% \begin{DispWithArrows}
+%     m_{ij} & = Message(\vec{h}_i, \vec{h}_j) 
+%         \Arrow[tikz=<-, jump=3]{Repeat for $L$ layers} \label{message_fn} \\
+%     \vec{A}_i & = Aggregate(\vec{h}_i, \{m_{ij}\}_{j \in N_i}) \label{aggregation_fn} \\
+%     \vec{h}^{\prime}_i & = Update(\vec{A}_i) \label{update_fn} \\
+%     &\vdots \nonumber \\
+%     \vec{h}^{\,P}_G & = Readout(\{h_{i}\}_{i \in V}) \label{readout_fn}
+% \end{DispWithArrows}
+
+\subsection{The Transformer, Briefly}
+The transformer introduced by \textcite{vaswani_attention_2017} represents a major leap in the capability of \gls{ml} models across \gls{nlp}, image processing and biomedical tasks \cite{devlin_bert_2018, brown_language_2020, parmar_image_2018, radford_learning_2021, elnaggar_prottrans_2020}. 
+
+Given a node feature vector $\vec{h}$, we compute query $Q$, key $K$ and value $V$ matrices using three randomly initialised learnable matrices $W_Q$, $W_K$, and $W_V$:
+\begin{align}
+    Q &= \vec{h}W_Q \quad \quad (\text{shape: } (\vec{h}, d_k)) \label{eq:query} \\
+    K &= \vec{h}W_K \quad \quad (\text{shape: } (\vec{h}, d_k)) \label{eq:key} \\
+    V &= \vec{h}W_V \quad \quad (\text{shape: } (\vec{h}, d_v)) \label{eq:value}
+\end{align}
+
+In the above, $d_k$ denotes the dimensionalities of $K$, and $d_v$ is the dimensionality of $V$.
+
+The attention matrix $A$ captures the similarity between the $Q$ and $K$ matrices. $A$ is then passed through a softargmax, ensuring all attention \say{weights} in $A$ sum to one. This enables the final output of the attention mechanism to be a weighted sum of the value vectors $V$, where the weights are given by the computed attention scores:
+
+\begin{align}
+    A &= \frac{QK^T}{\sqrt{d_k}} \quad \quad &(\text{shape: } (\vec{h}, \vec{h})) \label{eq:attention_scores} \\
+    \text{Attention}(Q, K, V) &= \text{softmax}(A)V \quad \quad &(\text{shape: } (\vec{h}, d_v)) \label{eq:attention}
+\end{align}
+
+Multiple attention calculations or \say{heads} are performed in parallel on the same input vector using different $Q$, $K$ and $V$ matrices. Their outputs are later concatenated to form the final representation. This concatenated output is fed through a conventional \gls{nn}.
+
+For further details, interested readers may consult an excellent review on the transformer and its variants by \textcite{lin_survey_2021}.

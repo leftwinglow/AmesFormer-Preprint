@@ -15,11 +15,24 @@
 \usepackage{lipsum}		% Can be removed after putting your text content
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{witharrows} % Equation arrows
 \usepackage{cleveref} % Better equation management
 \usepackage{doi}
 \usepackage{float}
 \usepackage{subcaption}
+\usepackage{dirtytalk}
 
+% Tikz for graphics and graph drawing
+\usepackage{tikz}
+\usetikzlibrary{graphs, graphdrawing, graphs.standard, quotes, decorations.pathmorphing, arrows.meta, matrix,decorations.pathreplacing}
+\usepackage{listofitems} % For the NN figures
+\usepackage[outline]{contour} % glow around text
+\contourlength{1.4pt}
+
+\usegdlibrary {force}
+
+% Plots
+\usepackage{pgfplots}
 
 \usepackage[backend=biber, style=authoryear, citestyle=authoryear, maxcitenames=2, mincitenames=1, uniquename=false]{biblatex}
 \addbibresource{references.bib}
@@ -45,14 +58,20 @@
 	School of Pharmacy\\
 	The University of Sydney\\
 	Sydney, Australia \\
-	\texttt{hippo@cs.cranberry-lemon.edu} \\
+	\texttt{Placeholder@Nothing.com} \\
 	%% examples of more authors
 	\And
 	\href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Josiah ?.~Evans} \\
 	Independent Researcher\\
-	Mount-Sheikh University\\
+	% Mount-Sheikh University\\
 	Seoul, Republic of Korea \\
-	\texttt{stariate@ee.mount-sheikh.edu} \\
+	\texttt{Placeholder@Nothing.com} \\
+    \And
+	\href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Slade T.~Matthews} \\
+	School of Pharmacy\\
+	The University of Sydney\\
+	Sydney, Australia \\
+	\texttt{Placeholder@Nothing.com} \\
 	%% \AND
 	%% Coauthor \\
 	%% Affiliation \\
@@ -103,6 +122,8 @@ pdfkeywords={Ames, Mutagenicity, GNN, Transformer},
 \section{Introduction}
 \input{Introduction}
 
+\section{Methods}
+\input{Methods}
 
 \section{Headings: first level}
 \label{sec:headings}
