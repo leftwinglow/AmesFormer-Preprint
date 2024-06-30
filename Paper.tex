@@ -1,0 +1,177 @@
+\documentclass{article}
+
+
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}		% Can be removed after putting your text content
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{cleveref} % Better equation management
+\usepackage{doi}
+\usepackage{float}
+\usepackage{subcaption}
+
+
+\usepackage[backend=biber, style=authoryear, citestyle=authoryear, maxcitenames=2, mincitenames=1, uniquename=false]{biblatex}
+\addbibresource{references.bib}
+\let\cite\autocite
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+
+% Advanced glossary and acronym management
+\usepackage[acronym, automake]{glossaries-extra}
+\setabbreviationstyle[acronym]{long-short}
+\loadglsentries{Acronyms}
+\makeglossaries
+
+
+\title{AmesFormer: A Graph Transformer Neural Network for Mutagenicity Prediction}
+
+%\date{September 9, 1985}	% Here you can change the date presented in the paper title
+%\date{} 					% Or removing it
+
+\author{ \href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Luke A.~Thompson}\thanks{Use footnote for providing further
+		information about author (webpage, alternative
+		address)---\emph{not} for acknowledging funding agencies.} \\
+	School of Pharmacy\\
+	The University of Sydney\\
+	Sydney, Australia \\
+	\texttt{hippo@cs.cranberry-lemon.edu} \\
+	%% examples of more authors
+	\And
+	\href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Josiah ?.~Evans} \\
+	Independent Researcher\\
+	Mount-Sheikh University\\
+	Seoul, Republic of Korea \\
+	\texttt{stariate@ee.mount-sheikh.edu} \\
+	%% \AND
+	%% Coauthor \\
+	%% Affiliation \\
+	%% Address \\
+	%% \texttt{email} \\
+	%% \And
+	%% Coauthor \\
+	%% Affiliation \\
+	%% Address \\
+	%% \texttt{email} \\
+	%% \And
+	%% Coauthor \\
+	%% Affiliation \\
+	%% Address \\
+	%% \texttt{email} \\
+}
+
+% Uncomment to remove the date
+%\date{}
+
+% Uncomment to override  the `A preprint' in the header
+%\renewcommand{\headeright}{Technical Report}
+%\renewcommand{\undertitle}{Technical Report}
+\renewcommand{\shorttitle}{AmesFormer}
+
+%%% Add PDF metadata to help others organize their library
+%%% Once the PDF is generated, you can check the metadata with
+%%% $ pdfinfo template.pdf
+\hypersetup{
+pdftitle={AmesFormer},
+pdfsubject={q-bio.NC, q-bio.QM},
+pdfauthor={Luke A.~Thompson, Josiah ?.~Evans},
+pdfkeywords={Ames, Mutagenicity, GNN, Transformer},
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+	The Ames mutagenicity test is a gold standard assay for the safety assessment of new chemicals. However, many \textit{in silico} models rely on challenging-to-interpret ensemble strategies and molecular fingerprint data which neglects gestalt molecular structure. To improve upon these models, we propose AmesFormer, a graph transformer neural network which shows state-of-the-art single model performance for the prediction of Ames mutagenicity. We briefly review the current state of Ames modelling with a focus on graph neural networks. We then discuss the architecture of AmesFormer with specific reference to the generalisation of transformer positional encodings to chemical data and efforts to make AmesFormer accessible to academic researchers. We benchmark AmesFormer using a standardised dataset against 22 other Ames models, achieving near-best-in-class performance. We then quantify the uncertainty of our performance metrics using a unique Bayesian approach. We support our findings with reference to other models from the literature and with theoretical developments in discrete mathematics and graph theory. Overall, we present a high-performance, accessible, and open-source computational model for Ames mutagenicity, with significant potential for regulatory and drug development applications. 
+\end{abstract}
+
+
+% keywords can be removed
+\keywords{Ames \and Mutagenicity \and Neural Networks \and GNNs}
+
+
+\section{Introduction}
+\input{Introduction}
+
+
+\section{Headings: first level}
+\label{sec:headings}
+
+\lipsum[4] See Section \ref{sec:headings}.
+
+\subsection{Headings: second level}
+\lipsum[5]
+\begin{equation}
+	\xi _{ij}(t)=P(x_{t}=i,x_{t+1}=j|y,v,w;\theta)= {\frac {\alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}{\sum _{i=1}^{N} \sum _{j=1}^{N} \alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}}
+\end{equation}
+
+\subsubsection{Headings: third level}
+\lipsum[6]
+
+\paragraph{Paragraph}
+\lipsum[7]
+
+
+
+\section{Examples of citations, figures, tables, references}
+\label{sec:others}
+
+\subsection{Figures}
+\lipsum[10]
+See Figure \ref{fig:fig1}. Here is how you add footnotes. \footnote{Sample of the first footnote.}
+\lipsum[11]
+
+\begin{figure}
+	\centering
+	\fbox{\rule[-.5cm]{4cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
+	\caption{Sample figure caption.}
+	\label{fig:fig1}
+\end{figure}
+
+\subsection{Tables}
+See awesome Table~\ref{tab:table}.
+
+The documentation for \verb+booktabs+ (`Publication quality tables in LaTeX') is available from:
+\begin{center}
+	\url{https://www.ctan.org/pkg/booktabs}
+\end{center}
+
+
+\begin{table}
+	\caption{Sample table title}
+	\centering
+	\begin{tabular}{lll}
+		\toprule
+		\multicolumn{2}{c}{Part}                   \\
+		\cmidrule(r){1-2}
+		Name     & Description     & Size ($\mu$m) \\
+		\midrule
+		Dendrite & Input terminal  & $\sim$100     \\
+		Axon     & Output terminal & $\sim$10      \\
+		Soma     & Cell body       & up to $10^6$  \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:table}
+\end{table}
+
+\subsection{Lists}
+\begin{itemize}
+	\item Lorem ipsum dolor sit amet
+	\item consectetur adipiscing elit.
+	\item Aliquam dignissim blandit est, in dictum tortor gravida eget. In ac rutrum magna.
+\end{itemize}
+
+\printbibliography
+\printglossaries
+
+\end{document}
